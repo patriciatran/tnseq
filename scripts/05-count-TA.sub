@@ -1,0 +1,27 @@
+# script to use
+executable = 05-count-TA.sh
+
+# variables
+staging=/staging/ptran5/arunima/
+ref=Bacillus168
+
+arguments = $(ref)
+
+# logs
+log = logs/count_TA_$(ref).log
+error = logs/count_TA_$(ref).err
+output = logs/count_TA_$(ref).out
+
+# transfer files for inputs and outputs
+transfer_input_files = file://$(staging)/data/$(ref).fasta, count_TA.py
+transfer_output_files = TA_sites.bed, TA_sites_plot.png
+transfer_output_remaps = "TA_sites.bed=file://$(staging)/insertions/$(ref)_TA_sites.bed;TA_sites_plot.png=file://$(staging)/insertions/TA_sites_plot.png"
+
+requirements = (HasCHTCStaging == true) && (OpSysMajorVer > 7) && (HasChtcProjects == true)
+
+# resources
+request_cpus = 4
+request_memory = 1GB
+request_disk = 5GB      
+
+queue

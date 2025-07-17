@@ -1,0 +1,30 @@
+# container image
+container_image = docker://quay.io/biocontainers/cutadapt:5.1--py310h1fe012e_0
+
+# script to use
+executable = 01-cutadapt.sh
+
+# variables
+cutadapt=ACAGGTTGGATGA
+staging=/staging/ptran5/arunima/
+
+arguments = $(sample) $(cutadapt)
+
+# logs
+log = logs/cutadapt_$(sample).log
+error = logs/cutadapt_$(sample).err
+output = logs/cutadapt_$(sample).out
+
+# transfer files for inputs and outputs
+transfer_input_files = file://$(staging)/data/$(sample)_R1_001.fastq.gz
+transfer_output_files = $(sample)_trimmed.fastq.gz
+transfer_output_remaps = "$(sample)_trimmed.fastq.gz=file://$(staging)/cutadapt/$(sample)_trimmed.fastq.gz"
+
+requirements = (HasCHTCStaging == true) && (OpSysMajorVer > 7) && (HasChtcProjects == true)
+
+# resources
+request_cpus = 4
+request_memory = 4GB
+request_disk = 10GB      
+
+queue sample from samples.txt

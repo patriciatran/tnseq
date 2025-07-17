@@ -1,0 +1,27 @@
+# container image
+container_image = docker://quay.io/biocontainers/bowtie2:2.5.4--he96a11b_6
+
+# script to use
+executable = 02-index_ref.sh
+
+# variables
+ref=Bacillus168
+staging=/staging/ptran5/arunima/
+
+arguments = $(staging) $(ref)
+
+# logs
+log = logs/index_$(ref).log
+error = logs/index_$(ref).err
+output = logs/index_$(ref).out
+
+# transfer files for inputs and outputs
+
+requirements = (HasCHTCStaging == true) && (OpSysMajorVer > 7) && (HasChtcProjects == true)
+
+# resources
+request_cpus = 4
+request_memory = 4GB
+request_disk = 10GB      
+
+queue

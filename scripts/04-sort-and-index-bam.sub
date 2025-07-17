@@ -1,0 +1,30 @@
+# container image
+container_image = oras://registry.doit.wisc.edu/ptran5/containers/bowtie2_samtools:1.0.0
+
+# script to use
+executable = 04-sort-and-index-bam.sh
+
+# variables
+staging=/staging/ptran5/arunima/
+ref=Bacillus168
+
+arguments = $(sample) $(ref) $(staging) $(request_cpus)
+
+# logs
+log = logs/SortIndex_$(sample).log
+error = logs/SortIndex_$(sample).err
+output = logs/SortIndex_$(sample).out
+
+# transfer files for inputs and outputs
+#transfer_input_files = file://$(staging)/aligned/$(sample)_aligned.bam
+#transfer_output_files = $(sample)_sorted.bam
+#transfer_output_remaps = "$(sample)_sorted.bam=file://$(staging)/aligned/$(sample)_sorted.bam"
+
+requirements = (HasCHTCStaging == true) && (OpSysMajorVer > 7) && (HasChtcProjects == true)
+
+# resources
+request_cpus = 8
+request_memory = 10GB
+request_disk = 16GB      
+
+queue sample from samples.txt

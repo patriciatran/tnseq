@@ -1,0 +1,30 @@
+# container image
+container_image = oras://registry.doit.wisc.edu/ptran5/containers/bowtie2_samtools:1.0.0
+
+# script to use
+executable = 03-map-to-ref.sh
+
+# variables
+staging=/staging/ptran5/arunima/
+ref=Bacillus168
+
+arguments = $(sample) $(ref) $(staging) $(request_cpus)
+
+# logs
+log = logs/mapping_$(sample)_to_$(ref).log
+error = logs/mapping_$(sample)_to_$(ref).err
+output = logs/mapping_$(sample)_to_$(ref).out
+
+# transfer files for inputs and outputs
+transfer_input_files = file://$(staging)/cutadapt/$(sample)_trimmed.fastq.gz
+transfer_output_files = $(sample)_aligned.bam
+transfer_output_remaps = "$(sample)_aligned.bam=file://$(staging)/aligned/$(sample)_aligned.bam"
+
+requirements = (HasCHTCStaging == true) && (OpSysMajorVer > 7) && (HasChtcProjects == true)
+
+# resources
+request_cpus = 8
+request_memory = 10GB
+request_disk = 16GB      
+
+queue sample from samples.txt

@@ -1,0 +1,31 @@
+# container image
+container_image = docker://quay.io/biocontainers/bowtie2:2.5.4--he96a11b_6
+
+# script to use
+executable = 08-gff-to-bed.sh
+
+# variables
+ref=Bacillus168
+feature=gene
+staging=/staging/ptran5/arunima/
+
+arguments = $(ref) $(feature)
+
+# logs
+log = logs/gff-to-bed_$(ref).log
+error = logs/gff-to-bed_$(ref).err
+output = logs/gff-to-bed__$(ref).out
+
+# transfer files for inputs and outputs
+transfer_input_files = file://$(staging)/data/$(ref).gff
+transfer_output_files = $(ref)_$(feature).bed
+transfer_output_remaps = "$(ref)_$(feature).bed=file://$(staging)/gff/$(ref)_$(feature).bed" 
+
+requirements = (HasCHTCStaging == true) && (OpSysMajorVer > 7) && (HasChtcProjects == true)
+
+# resources
+request_cpus = 4
+request_memory = 4GB
+request_disk = 10GB      
+
+queue

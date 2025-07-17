@@ -1,0 +1,30 @@
+# container image
+container_image = docker://quay.io/biocontainers/bedtools:2.27.1--h077b44d_9
+
+# script to use
+executable = 06-extract-insertion-sites.sh
+
+# variables
+staging=/staging/ptran5/arunima/
+ref=Bacillus168
+
+arguments = $(sample) $(ref) $(staging) $(request_cpus)
+
+# logs
+log = logs/ExtractInsertionSites_$(sample).log
+error = logs/ExtractInsertionSites_$(sample).err
+output = logs/ExtractInsertionSites_$(sample).out
+
+# transfer files for inputs and outputs
+transfer_input_files = file://$(staging)/aligned/$(sample)_sorted.bam
+transfer_output_files = $(sample)_insertions.bed
+transfer_output_remaps = "$(sample)_insertions.bed=file://$(staging)/insertions/$(sample)_insertions.bed"
+
+requirements = (HasCHTCStaging == true) && (OpSysMajorVer > 7) && (HasChtcProjects == true)
+
+# resources
+request_cpus = 8
+request_memory = 10GB
+request_disk = 16GB      
+
+queue sample from samples.txt
