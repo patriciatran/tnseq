@@ -1,6 +1,3 @@
-# container image
-container_image = docker://quay.io/biocontainers/bowtie2:2.5.4--he96a11b_6
-
 # script to use
 executable = 08-gff-to-bed.sh
 
@@ -14,10 +11,10 @@ arguments = $(ref) $(feature)
 # logs
 log = logs/gff-to-bed_$(ref).log
 error = logs/gff-to-bed_$(ref).err
-output = logs/gff-to-bed__$(ref).out
+output = logs/gff-to-bed_$(ref).out
 
 # transfer files for inputs and outputs
-transfer_input_files = file://$(staging)/data/$(ref).gff
+transfer_input_files = file://$(staging)/data/$(ref).gff, gff-to-bed.py
 transfer_output_files = $(ref)_$(feature).bed
 transfer_output_remaps = "$(ref)_$(feature).bed=file://$(staging)/gff/$(ref)_$(feature).bed" 
 
