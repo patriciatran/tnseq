@@ -1,5 +1,5 @@
 # script to use
-executable = 05-count-TA.sh
+executable = 05-find-TA.sh
 
 # variables
 staging=/staging/ptran5/arunima/

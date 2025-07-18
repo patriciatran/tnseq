@@ -16,9 +16,9 @@ error = logs/ExtractInsertionSites_$(sample).err
 output = logs/ExtractInsertionSites_$(sample).out
 
 # transfer files for inputs and outputs
-transfer_input_files = extract_insertions.py
-transfer_output_files = bamtobed_output.bed, insertions.bed
-transfer_output_remaps = "bamtobed_output.bed=file://$(staging)/insertions/$(sample)_bamtobed_output.bed; insertions.bed=file://$(staging)/insertions/$(sample)_insertions.bed"
+transfer_input_files = file://$(staging)/aligned/$(sample)_sorted.bam
+transfer_output_files = $(sample)_insertions.bed
+transfer_output_remaps = "$(sample)_insertions.bed=file://$(staging)/insertions/$(sample)_insertions.bed"
 
 requirements = (HasCHTCStaging == true) && (OpSysMajorVer > 7) && (HasChtcProjects == true)
 

@@ -1,0 +1,32 @@
+# container image
+container_image = docker://quay.io/biocontainers/bedtools:2.27.1--h077b44d_9
+
+# script to use
+executable = 09-count-insertions-per-TA-sites-with-genes.sh
+
+# variables
+staging=/staging/ptran5/arunima/
+ref=Bacillus168
+feature=gene
+
+# arguments
+arguments = $(sample) $(ref) $(feature)
+
+# logs
+log = logs/InsertionsPerTASitesGenes_$(sample).log
+error = logs/InsertionsPerTASitesGenes_$(sample).err
+output = logs/InsertionsPerTASitesGenes_$(sample).out
+
+# transfer files for inputs and outputs
+transfer_input_files = file://$(staging)/insertions/$(sample)_insertions_counts.bed, file://$(staging)/gff/$(ref)_$(feature).bed
+transfer_output_files = $(sample)_gene_counts.bed
+transfer_output_remaps = "$(sample)_gene_counts.bed=file://$(staging)/insertions/$(sample)_gene_counts.bed"
+
+requirements = (HasCHTCStaging == true) && (OpSysMajorVer > 7) && (HasChtcProjects == true)
+
+# resources
+request_cpus = 8
+request_memory = 10GB
+request_disk = 16GB      
+
+queue sample from samples.txt

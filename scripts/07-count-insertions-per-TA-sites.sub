@@ -24,7 +24,7 @@ requirements = (HasCHTCStaging == true) && (OpSysMajorVer > 7) && (HasChtcProjec
 
 # resources
 request_cpus = 8
-request_memory = 10GB
+request_memory = 32GB
 request_disk = 16GB      
 
 queue sample from samples.txt

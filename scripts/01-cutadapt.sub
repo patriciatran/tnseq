@@ -8,7 +8,7 @@ executable = 01-cutadapt.sh
 cutadapt=ACAGGTTGGATGA
 staging=/staging/ptran5/arunima/
 
-arguments = $(sample) $(cutadapt)
+arguments = $(sample) $(cutadapt) $(request_cpus)
 
 # logs
 log = logs/cutadapt_$(sample).log
