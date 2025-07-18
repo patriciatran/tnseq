@@ -1,1 +1,4 @@
 scripts/logs/
+scripts/docker*
+scripts/notneeded/
+scripts/*DAG*
