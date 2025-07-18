@@ -2,7 +2,7 @@
 executable = 05-find-TA.sh
 
 # variables
-staging=/staging/ptran5/arunima/
+staging=/staging/$(netid)/$(project)/
 ref=Bacillus168
 
 arguments = $(ref)

@@ -5,9 +5,7 @@ container_image = docker://quay.io/biocontainers/bedtools:2.27.1--h077b44d_9
 executable = 09-count-insertions-per-TA-sites-with-genes.sh
 
 # variables
-staging=/staging/ptran5/arunima/
-ref=Bacillus168
-feature=gene
+staging=/staging/$(netid)/$(project)/
 
 # arguments
 arguments = $(sample) $(ref) $(feature)

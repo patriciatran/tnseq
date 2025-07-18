@@ -2,9 +2,7 @@
 executable = 08-gff-to-bed.sh
 
 # variables
-ref=Bacillus168
-feature=gene
-staging=/staging/ptran5/arunima/
+staging=/staging/$(netid)/$(project)/
 
 arguments = $(ref) $(feature)
 

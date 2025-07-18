@@ -5,8 +5,8 @@ container_image = docker://quay.io/biocontainers/bowtie2:2.5.4--he96a11b_6
 executable = 02-index_ref.sh
 
 # variables
-ref=Bacillus168
-staging=/staging/ptran5/arunima/
+#ref=Bacillus168
+staging=/staging/$(netid)/$(project)/
 
 arguments = $(staging) $(ref)
 

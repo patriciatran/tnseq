@@ -1,11 +1,11 @@
 # container image
-container_image = oras://registry.doit.wisc.edu/ptran5/containers/bowtie2_samtools:1.0.0
+container_image = oras://registry.doit.wisc.edu/$(netid)/containers/bowtie2_samtools:1.0.0
 
 # script to use
 executable = 04-sort-and-index-bam.sh
 
 # variables
-staging=/staging/ptran5/arunima/
+staging=/staging/$(netid)/$(project)/
 ref=Bacillus168
 
 arguments = $(sample) $(ref) $(staging) $(request_cpus)

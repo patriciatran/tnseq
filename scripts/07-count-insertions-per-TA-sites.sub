@@ -5,7 +5,7 @@ container_image = docker://quay.io/biocontainers/bedtools:2.27.1--h077b44d_9
 executable = 07-count-insertions-per-TA-sites.sh
 
 # variables
-staging=/staging/ptran5/arunima/
+staging=/staging/$(netid)/$(project)/
 ref=Bacillus168
 
 arguments = $(sample) $(ref) $(staging) $(request_cpus)
