@@ -1,7 +1,10 @@
 #!/bin/bash
 
+NETID="$1"
+PROJECT="$2"
+
 # Get sorted list of input files
-files=($(ls /staging/ptran5/arunima/insertions/*gene_counts.bed | sort))
+files=($(ls /staging/$NETID/$PROJECT/insertions/*gene_counts.bed | sort))
 
 # Extract the first 6 columns from the first file as the base
 cut -f1-6 "${files[0]}" > merged_tmp.txt
@@ -15,7 +18,7 @@ for f in "${files[@]}"; do
 done
 
 # Save final output
-mv merged_tmp.txt merged_output.txt
+mv merged_tmp.txt ${PROJECT}_merged_output.txt
 
 # Optional: remove intermediate column files
 
