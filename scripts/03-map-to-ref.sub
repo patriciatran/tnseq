@@ -1,6 +1,6 @@
 # container image
-#container_image = docker://quay.io/biocontainers/bowtie:1.3.1--py312hf8dbd9f_10
-container_image = oras://registry.doit.wisc.edu/$(netid)/containers/bowtie2_samtools:1.0.0
+container_image = docker://quay.io/biocontainers/bowtie:1.3.1--py312hf8dbd9f_10
+#container_image = oras://registry.doit.wisc.edu/$(netid)/containers/bowtie2_samtools:1.0.0
 
 # script to use
 executable = 03-map-to-ref.sh
@@ -12,14 +12,17 @@ ref=Bacillus168
 arguments = $(sample) $(ref) $(staging) $(request_cpus)
 
 # logs
-log = logs/mapping_$(sample)_to_$(ref).log
-error = logs/mapping_$(sample)_to_$(ref).err
-output = logs/mapping_$(sample)_to_$(ref).out
+log = logs/mapping_$(sample)_to_$(ref)_$(cluster).$(process).log
+error = logs/mapping_$(sample)_to_$(ref)_$(cluster).$(process).err
+output = logs/mapping_$(sample)_to_$(ref)_$(cluster).$(process).out
 
 # transfer files for inputs and outputs
 transfer_input_files = file://$(staging)/cutadapt/$(sample)_trimmed.fastq.gz
-transfer_output_files = $(sample)_aligned.bam
-transfer_output_remaps = "$(sample)_aligned.bam=file://$(staging)/aligned/$(sample)_aligned.bam"
+transfer_output_files = $(sample)_trimmed_mapped.sam
+transfer_output_remaps = "$(sample)_trimmed_mapped.sam=file://$(staging)/aligned/$(sample)_trimmed_mapped.sam"
+
+#transfer_output_files = $(sample)_aligned.bam
+#transfer_output_remaps = "$(sample)_aligned.bam=file://$(staging)/aligned/$(sample)_aligned.bam"
 
 requirements = (HasCHTCStaging == true) && (OpSysMajorVer > 7) && (HasChtcProjects == true)
 

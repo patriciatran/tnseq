@@ -11,9 +11,9 @@ ref=Bacillus168
 arguments = $(sample) $(ref) $(staging) $(request_cpus)
 
 # logs
-log = logs/InsertionsPerTASites_$(sample).log
-error = logs/InsertionsPerTASites_$(sample).err
-output = logs/InsertionsPerTASites_$(sample).out
+log = logs/InsertionsPerTASites_$(sample)_$(cluster).$(process).log
+error = logs/InsertionsPerTASites_$(sample)_$(cluster).$(process).err
+output = logs/InsertionsPerTASites_$(sample)_$(cluster).$(process).out
 
 # transfer files for inputs and outputs
 transfer_input_files = file://$(staging)/insertions/$(sample)_insertions.bed, file://$(staging)/insertions/$(ref)_TA_sites.bed

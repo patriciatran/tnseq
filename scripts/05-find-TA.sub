@@ -8,9 +8,9 @@ ref=Bacillus168
 arguments = $(ref)
 
 # logs
-log = logs/count_TA_$(ref).log
-error = logs/count_TA_$(ref).err
-output = logs/count_TA_$(ref).out
+log = logs/count_TA_$(ref)_$(cluster).$(process).log
+error = logs/count_TA_$(ref)_$(cluster).$(process).err
+output = logs/count_TA_$(ref)_$(cluster).$(process).out
 
 # transfer files for inputs and outputs
 transfer_input_files = file://$(staging)/data/$(ref).fasta, count_TA.py

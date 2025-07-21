@@ -8,7 +8,7 @@ CPUS="$3"
 #after:mysequence
 #-a option removes the adapter and things downstreams
 
-cutadapt -a ${CUTADAPT} \
+cutadapt -a ${CUTADAPT} -m 15\
 	-o ${SAMPLE}_trimmed.fastq.gz -j ${CPUS}\
 	${SAMPLE}_R1_001.fastq.gz
 

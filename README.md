@@ -11,12 +11,13 @@ You will need single-end sequences, in the form of
 `{sample}_R1_001.fastq` per sample.
 
 # File descriptions
-this repository contains scripts to analyze TnSeq data on the UW-Madison Center for High Throughput Computing. It contains a series of paired `sh` and `submit` files, containing the commands to be run, and the resources needed to run the job, respectively.
+
+This repository contains scripts to analyze TnSeq data on the UW-Madison Center for High Throughput Computing. It contains a series of paired `sh` and `submit` files, containing the commands to be run, and the resources needed to run the job, respectively.
 Helpers scripts (`.sh`, `.py`) are available to set up the project structure or summarize all the data at the end.
 
 ## Scripts folders
 - `set_up.sh`: a bash script that takes in as an argument your netID and a project name. Will create all the input and output folder structure needed for this pipeline.
--`01-cutadapt.sub`: cutadapt script that takes trim the adapter off of the FASTQ file. For example, `mysequenceADAPTERsomethingelse`, will keep mysequence only.
+-`01-cutadapt.sub`: cutadapt script that takes trim the adapter off of the FASTQ file. For example, `mysequenceADAPTERsomethingelse`, will keep `mysequence` only. 
 - `02-index_ref.sub`: Builds the genome index file for the reference genome, to prepare for mapping.
 - `03-map-to-ref.sub`: Maps a sample to the reference genome.
 - `04-sort-and-index-bam.sub`: Take the aligned reads, sorts and index the file.
@@ -55,7 +56,108 @@ NC_000964.3	9809	11364	rrnO-16S	.	+	220	137	232	72	89	7
 
 # Step by Step Instructions
 
-> [!NOTE]
-> Please make sure to have an account and a `staging` folder.
+1. Log into the server
 
-1. 
+```
+ssh netid@ap2002.chtc.wisc.edu
+# enter password
+# make a copy of this github repository
+git clone https://github.com/patriciatran/tnseq.git
+```
+
+2. Navigate to the tnseq folder, and enter the scripts folder
+```
+cd tnseq/scripts
+ls
+```
+
+3. Create the folder structured for the input and output files. The script `set_up` needs two arguments: your `netID` and your project name. 
+```
+bash set_up.sh bbadger Set1
+```
+In the example above, `bbadger` is the netid and `Set1` is the projec name.
+This will create the following folder structure:
+
+```
+/staging/bbadger/Set1
+/staging/bbadger/Set1/data
+/staging/bbadger/Set1/cutadapt
+/staging/bbadger/Set1/aligned
+/staging/bbadger/Set1/gff
+/staging/bbadger/Set1/insertions
+/staging/bbadger/Set1/alignment
+```
+
+4. You will need 3 input file types:
+- Single end paired reads for each sample (e.g. `sample_R1_001.fastq.gz`)
+- The reference genome, this can be a reference genome from NCBI (`reference.fasta`)
+- A GFF annotation, which is a `gene feature files` that contains all the annotations of the reference genome. This can also be downloaded from NCBI (`reference.gff`). Make sure that the file name matches that of the fasta file, but just has a different file extension. For example, `Bacillus168.fasta` and `Bacillus168.gff`.
+
+To transfer files from your computer onto the Staging folder, do the following.
+
+Assuming that you have a folder on your laptop:
+```
+~/Downloads/data/sample1_R1_001.fastq.gz
+~/Downloads/data/sample2_R1_001.fastq.gz
+~/Downloads/data/sample3_R1_001.fastq.gz
+~/Downloads/data/Bacillus168.fasta
+~/Downloads/data/Bacillus168.gff
+```
+
+You can transfer the whole folder by typing this:
+Open a new Terminal tab
+```
+cd ~/Downloads
+scp -r data/* netid@ap2002.chtc.wisc.edu:/staging/netid/Set1/data/.
+```
+
+The `scp` command with the `-r` flag allows to transfer a whole folder.
+The first argument `data` is the folder to be transferred. This is followed by a `space`. Then we use the netID login onto the server, followed by `:`, and then the path to where we want to transfer these files to. In this case, we want to transfer them into the `data` subfolder that we created in Step 3.
+
+Change Terminal tabs for the one that you're logged into the server.
+Make sure the files have been transferred correctly by listing the folder contents.
+
+```
+ls -lht /staging/bbadger/Set1/data
+```
+
+5. Next, we will create the DAG that defines the steps of our workflow. We will use the script `makedag.sh` to automatically create this DAG file.
+
+The `makedag.sh` script takes many arguments, in a very specific order.
+
+`bash makedag.sh netid project adaptersequence featureinGFFfile reference outputfile`
+
+
+- `netid`: your NetID
+- `project`: the same name as in the set_up.sh script. 
+- `adaptersequence`: the adapter sequence, specific to the TnSeq experiment. No quotation marks, just the sequence.
+- `featureinGFFfile`: the feature of the GFF file to extract, when counting the sum of TA in those features. Commons ones are `gene`, `pseudogene` etc. To look at all the options open the GFF file and look at the 3rd column.
+- `reference`: the name of the reference genome. reference.fasta or reference.gff
+- `outputfile`: the name of the output file name for the dag.
+
+Here is an example of a command with arguments:
+
+```
+bash makedag.sh bbadger Set1 ACAGGTTGGATGA gene Bacillus168 Set1
+```
+
+5. Submit the workflow.
+
+```
+condor_submit_dag Set1.dag
+```
+
+Wait for results to populate the /staging/netid/project/ folder.
+You can close the terminal and come back - your jobs will automatically be submitted and ran.
+
+6. Summarize the results. A script named `merged_files.sh` is available to help you summarize your results. This script takes 2 arguments: your `netid` and your `project` name.
+
+```
+bash merged_files.sh bbadger Set1
+```
+
+This will create a file named Set1_merged_output.txt containing all sum of insertations per feature across all the samples in the given project.
+
+# Next Steps
+
+Once the data is processed by this pipeline, you can identify genomic features with more or less insertions by conditions. 

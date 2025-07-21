@@ -11,9 +11,9 @@ staging=/staging/$(netid)/$(project)/
 arguments = $(sample) $(cutadapt) $(request_cpus)
 
 # logs
-log = logs/cutadapt_$(sample).log
-error = logs/cutadapt_$(sample).err
-output = logs/cutadapt_$(sample).out
+log = logs/cutadapt_$(sample)_$(cluster).$(process).log
+error = logs/cutadapt_$(sample)_$(cluster).$(process).err
+output = logs/cutadapt_$(sample)_$(cluster).$(process).out
 
 # transfer files for inputs and outputs
 transfer_input_files = file://$(staging)/data/$(sample)_R1_001.fastq.gz

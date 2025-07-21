@@ -11,9 +11,9 @@ staging=/staging/$(netid)/$(project)/
 arguments = $(sample) $(ref) $(feature)
 
 # logs
-log = logs/InsertionsPerTASitesGenes_$(sample).log
-error = logs/InsertionsPerTASitesGenes_$(sample).err
-output = logs/InsertionsPerTASitesGenes_$(sample).out
+log = logs/InsertionsPerTASitesGenes_$(sample)_$(cluster).$(process).log
+error = logs/InsertionsPerTASitesGenes_$(sample)_$(cluster).$(process).err
+output = logs/InsertionsPerTASitesGenes_$(sample)_$(cluster).$(process).out
 
 # transfer files for inputs and outputs
 transfer_input_files = file://$(staging)/insertions/$(sample)_insertions_counts.bed, file://$(staging)/gff/$(ref)_$(feature).bed

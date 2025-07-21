@@ -11,9 +11,9 @@ ref=Bacillus168
 arguments = $(sample) $(ref) $(staging) $(request_cpus)
 
 # logs
-log = logs/SortIndex_$(sample).log
-error = logs/SortIndex_$(sample).err
-output = logs/SortIndex_$(sample).out
+log = logs/SortIndex_$(sample)_$(cluster).$(process).log
+error = logs/SortIndex_$(sample)_$(cluster).$(process).err
+output = logs/SortIndex_$(sample)_$(cluster).$(process).out
 
 # transfer files for inputs and outputs
 #transfer_input_files = file://$(staging)/aligned/$(sample)_aligned.bam

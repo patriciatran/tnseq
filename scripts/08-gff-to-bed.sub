@@ -7,9 +7,9 @@ staging=/staging/$(netid)/$(project)/
 arguments = $(ref) $(feature)
 
 # logs
-log = logs/gff-to-bed_$(ref).log
-error = logs/gff-to-bed_$(ref).err
-output = logs/gff-to-bed_$(ref).out
+log = logs/gff-to-bed_$(ref)_$(cluster).$(process).log
+error = logs/gff-to-bed_$(ref)_$(cluster).$(process).err
+output = logs/gff-to-bed_$(ref)_$(cluster).$(process).out
 
 # transfer files for inputs and outputs
 transfer_input_files = file://$(staging)/data/$(ref).gff, gff-to-bed.py

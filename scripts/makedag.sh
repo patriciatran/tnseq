@@ -3,7 +3,7 @@
 
 if [ "$#" -ne 6 ]; then
 	echo "Incorrect input. Usage: bash makedag.sh [netid] [project] [adapter] [feature] [ref]  [filename"
-	echo "Example input: bash makedag.sh bbadger Set1 ACAGGTTGGATGA gene Bacillus168"
+	echo "Example input: bash makedag.sh bbadger Set1 ACAGGTTGGATGA gene Bacillus168 Set1"
 
 	exit 1
 fi
@@ -22,7 +22,7 @@ echo $PROJECT
 echo $ADAPTER
 echo $FEATURE
 echo $REF
-echo $FILENAME
+echo ${FILENAME}.dag
 
 echo "FILENAME is $FILENAME"
 echo "Job CUT 01-cutadapt.sub" >> $FILENAME.dag
