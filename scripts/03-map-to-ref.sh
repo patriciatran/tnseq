@@ -12,15 +12,21 @@ CPUS="$4"
 #low to prevent false mapping.
 # BOWTIE1 is more sensitive than BOWTIE2 for short reads.
 
-bowtie -t -v 3 \
-	-a -m 1 --best --tryhard \
-	--strata ${STAGING}/data/${REF}_index \
-	${SAMPLE}_trimmed.fastq.gz \
-	${SAMPLE}_trimmed_mapped.sam
+bowtie -sam -t -p ${CPUS} -q -v 0 -l 17 --best --tryhard -s 0 -S \
+	${STAGING}/data/${REF}_index \
+        ${SAMPLE}_trimmed.fastq.gz | samtools view -@ ${CPUS} -bS - > ${SAMPLE}_aligned.bam
+
+#staph_aur.fasta input_reads.fastq
+
+#bowtie -S -sam -t -s 0 \
+#	-v 3 -l 17 -p ${CPUS} \
+#	-a --seed -1  --best --tryhard -k 1\
+#	${STAGING}/data/${REF}_index \
+#	${SAMPLE}_trimmed.fastq.gz | samtools view -@ ${CPUS} -bS - > ${SAMPLE}_aligned.bam
 
 #bowtie2 -x ${STAGING}/data/${REF}_index \
 #	-U ${SAMPLE}_trimmed.fastq.gz \
 #	-p ${CPUS} \
 #	-N 0 \
 #	-s 0 \
-#	-L 17  | samtools view -bS - > ${SAMPLE}_aligned.bam
+#	-L 17  | 
