@@ -2,3 +2,5 @@ scripts/logs/
 scripts/docker*
 scripts/notneeded/
 scripts/*DAG*
+scripts/*.dag
+scripts/*.dag.*

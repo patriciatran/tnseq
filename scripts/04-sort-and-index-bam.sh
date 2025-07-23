@@ -4,8 +4,12 @@ SAMPLE="$1"
 STAGING="$3"
 CPUS="$4"
 
-samtools view -bS ${STAGING}/aligned/${SAMPLE}_trimmed_mapped.sam > ${STAGING}/aligned/${SAMPLE}_aligned.bam
+ls -lht
 
-samtools sort ${STAGING}/aligned/${SAMPLE}_aligned.bam -o ${STAGING}/aligned/${SAMPLE}_sorted.bam -@ ${CPUS}
+samtools sort ${SAMPLE}_aligned.bam -o ${SAMPLE}_sorted.bam -@ ${CPUS}
 
-samtools index ${STAGING}/aligned/${SAMPLE}_sorted.bam
+ls -lht
+
+samtools index -@ ${CPUS} ${SAMPLE}_sorted.bam
+
+ls -lht

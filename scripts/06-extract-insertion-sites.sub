@@ -6,7 +6,7 @@ executable = 06-extract-insertion-sites.sh
 
 # variables
 staging=/staging/$(netid)/$(project)/
-ref=Bacillus168
+#ref=Bacillus168
 
 arguments = $(sample) $(ref) $(staging) $(request_cpus)
 
@@ -27,4 +27,4 @@ request_cpus = 8
 request_memory = 10GB
 request_disk = 16GB      
 
-queue sample from samples.txt
+queue

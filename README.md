@@ -17,6 +17,9 @@ Helpers scripts (`.sh`, `.py`) are available to set up the project structure or 
 
 ## Scripts folders
 - `set_up.sh`: a bash script that takes in as an argument your netID and a project name. Will create all the input and output folder structure needed for this pipeline.
+- `make_custom_dag.sh`: a bash script that will create a DAG for each sample
+- `create_main_dag.sh`: a bash script that will create a "super DAG" based off the .dag files you created using `make_custom_dag.sh`.
+
 -`01-cutadapt.sub`: cutadapt script that takes trim the adapter off of the FASTQ file. For example, `mysequenceADAPTERsomethingelse`, will keep `mysequence` only. 
 - `02-index_ref.sub`: Builds the genome index file for the reference genome, to prepare for mapping.
 - `03-map-to-ref.sub`: Maps a sample to the reference genome.
@@ -121,30 +124,39 @@ Make sure the files have been transferred correctly by listing the folder conten
 ls -lht /staging/bbadger/Set1/data
 ```
 
-5. Next, we will create the DAG that defines the steps of our workflow. We will use the script `makedag.sh` to automatically create this DAG file.
+5. Next, we will create the DAG that defines the steps of our workflow. We will use the script `create_make_custom_dag` to automatically create this DAG file.
 
-The `makedag.sh` script takes many arguments, in a very specific order.
+The `create_custom_dag.sh` script takes many arguments, in a very specific order.
 
-`bash makedag.sh netid project adaptersequence featureinGFFfile reference outputfile`
+`bash create_custom_dag.sh <samples_list> <netid> <adapter> <feature> <ref> <project>`
 
-
+- `samples_list` is the list of samples found in `/staging/netid/project/data/`, without the file extension R1_001.fastq.gz.
 - `netid`: your NetID
-- `project`: the same name as in the set_up.sh script. 
-- `adaptersequence`: the adapter sequence, specific to the TnSeq experiment. No quotation marks, just the sequence.
-- `featureinGFFfile`: the feature of the GFF file to extract, when counting the sum of TA in those features. Commons ones are `gene`, `pseudogene` etc. To look at all the options open the GFF file and look at the 3rd column.
+- `adapter`: the adapter sequence, specific to the TnSeq experiment. No quotation marks, just the sequence.
+- `feature`: the feature of the GFF file to extract, when counting the sum of TA in those features. Commons ones are `gene`, `pseudogene` etc. To look at all the options open the GFF file and look at the 3rd column.
 - `reference`: the name of the reference genome. reference.fasta or reference.gff
-- `outputfile`: the name of the output file name for the dag.
+- `project`: the same name as in the set_up.sh script. 
+
+This will create multiple files named `tnseq_SAMPLE.dag`
 
 Here is an example of a command with arguments:
 
 ```
-bash makedag.sh bbadger Set1 ACAGGTTGGATGA gene Bacillus168 Set1
+bash create_custom_dag.sh samples.txt bbadger ACAGGTTGGATGA gene Bacillus168 BothSets
 ```
+
+5. Create a main DAG using `create_main_dag.sh`. This only takes two arguments: your samples.txt list and an output file name for the final DAG.
+
+```
+bash create_main_dag samples.txt BothSets.dag
+```
+
+This will create a file named `BothSets.dag`
 
 5. Submit the workflow.
 
 ```
-condor_submit_dag Set1.dag
+condor_submit_dag BothSets.dag
 ```
 
 Wait for results to populate the /staging/netid/project/ folder.
@@ -153,11 +165,38 @@ You can close the terminal and come back - your jobs will automatically be submi
 6. Summarize the results. A script named `merged_files.sh` is available to help you summarize your results. This script takes 2 arguments: your `netid` and your `project` name.
 
 ```
-bash merged_files.sh bbadger Set1
+bash merged_files.sh bbadger BothSets
 ```
 
-This will create a file named Set1_merged_output.txt containing all sum of insertations per feature across all the samples in the given project.
+This will create a file named `BothSets_merged_output.txt` containing all sum of insertations per feature across all the samples in the given project.
 
 # Next Steps
 
-Once the data is processed by this pipeline, you can identify genomic features with more or less insertions by conditions. 
+Once the data is processed by this pipeline, note that these are the counts of insertions per feature (e.g. genes, etc.)
+
+Some common steps after this would be to normalize the data by the total reads, or by the gene length, and finding out which genes are considered Essential or Non-Essential across samples. Genes with few or no transposons in them are usually considered Essential. Because, if there were transposons that fell into the gene, and disrupted function, yet the bacterial is still growing normally, it means that gene was not that important for the system to be studied to begin with. 
+
+# List of softwares used
+
+This workflow uses:
+
+- Cutadapt v.5.1 
+
+
+- Bowtie version 1 (v.1.3.1)
+
+Langmead, B., Trapnell, C., Pop, M. et al. Ultrafast and memory-efficient alignment of short DNA sequences to the human genome. Genome Biol 10, R25 (2009). https://doi.org/10.1186/gb-2009-10-3-r25
+
+- Samtools
+
+Li H, Handsaker B, Wysoker A, Fennell T, Ruan J, Homer N, Marth G, Abecasis G, Durbin R; 1000 Genome Project Data Processing Subgroup. The Sequence Alignment/Map format and SAMtools. Bioinformatics. 2009 Aug 15;25(16):2078-9. doi: 10.1093/bioinformatics/btp352. Epub 2009 Jun 8. PMID: 19505943; PMCID: PMC2723002.
+
+- BedTools (v.2.27.1)
+
+Quinlan AR, Hall IM. BEDTools: a flexible suite of utilities for comparing genomic features. Bioinformatics. 2010 Mar 15;26(6):841-2. doi: 10.1093/bioinformatics/btq033. Epub 2010 Jan 28. PMID: 20110278; PMCID: PMC2832824.
+
+- Python
+
+# Citation
+
+This code and these instructions were written by Patricia Q. Tran for the project of Arunima Kalita.ß

@@ -1,5 +1,6 @@
 # container image
-container_image = oras://registry.doit.wisc.edu/$(netid)/containers/bowtie2_samtools:1.0.0
+container_image = file:///staging/$(netid)/bowtie1_samtools.sif
+#container_image = oras://registry.doit.wisc.edu/$(netid)/containers/bowtie2_samtools:1.0.0
 
 # script to use
 executable = 04-sort-and-index-bam.sh
@@ -16,9 +17,9 @@ error = logs/SortIndex_$(sample)_$(cluster).$(process).err
 output = logs/SortIndex_$(sample)_$(cluster).$(process).out
 
 # transfer files for inputs and outputs
-#transfer_input_files = file://$(staging)/aligned/$(sample)_aligned.bam
-#transfer_output_files = $(sample)_sorted.bam
-#transfer_output_remaps = "$(sample)_sorted.bam=file://$(staging)/aligned/$(sample)_sorted.bam"
+transfer_input_files = file://$(staging)/aligned/$(sample)_aligned.bam
+transfer_output_files = $(sample)_sorted.bam, $(sample)_sorted.bam.bai
+transfer_output_remaps = "$(sample)_sorted.bam=file://$(staging)/aligned/$(sample)_sorted.bam;$(sample)_sorted.bam.bai=file://$(staging)/aligned/$(sample)_sorted.bam.bai"
 
 requirements = (HasCHTCStaging == true) && (OpSysMajorVer > 7) && (HasChtcProjects == true)
 
@@ -27,4 +28,4 @@ request_cpus = 8
 request_memory = 10GB
 request_disk = 16GB      
 
-queue sample from samples.txt
+queue

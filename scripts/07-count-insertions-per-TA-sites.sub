@@ -27,4 +27,4 @@ request_cpus = 8
 request_memory = 32GB
 request_disk = 16GB      
 
-queue sample from samples.txt
+queue
