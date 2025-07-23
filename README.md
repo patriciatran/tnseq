@@ -1,4 +1,4 @@
-# TnSeq
+# Tn-Seq Workflow
 
 # Purpose
 The purpose of the pipeline is to analyze TnSeq data. TnSeq data usually is in the form of single-end short reads. Overall the reads need to be trimmed and mapped onto a reference genome.
@@ -9,11 +9,19 @@ Overall the final table is a table of Genes with the number of TA sites insertio
 # Input data
 You will need single-end sequences, in the form of 
 `{sample}_R1_001.fastq` per sample.
+You may use the data you receive directly from the Sequencing Center.
+
+You will also need a reference genome: a `fasta` file and a `gff` file containing coordinates of the genomic features. You can usually download the fasta and gff file directly from NCBI.
+
 
 # File descriptions
 
-This repository contains scripts to analyze TnSeq data on the UW-Madison Center for High Throughput Computing. It contains a series of paired `sh` and `submit` files, containing the commands to be run, and the resources needed to run the job, respectively.
+This repository contains scripts to analyze TnSeq data on the UW-Madison Center for High Throughput Computing, using HTcondor and DAGman to automate job runs.
+This repository contains a a folder named `scripts` containing a series of paired `sh` and `submit` files, containing the commands to be run, and the resources needed to run the job, respectively.
+
 Helpers scripts (`.sh`, `.py`) are available to set up the project structure or summarize all the data at the end.
+
+The pipeline is designed to be **fully reproducible** from start to finish through the use of software containers, executable scripts and various helper scripts. Also I designed this workflow such that this can be rerun for more projects, for example, if we were to generate new sequencing files, change reference genomes, etc. 
 
 ## Scripts folders
 - `set_up.sh`: a bash script that takes in as an argument your netID and a project name. Will create all the input and output folder structure needed for this pipeline.
@@ -33,6 +41,9 @@ annotation file of the reference genome into a `bed` format file.
  - `gff-to-bed.py`: helper script
 - `09-count-insertions-per-TA-sites-with-genes.sub`: Compiles the number of insertions (reads mapping to TA) among the genes (features) of the reference genome.
 - `merge_files.sh`: Take all the files from step `09` for each sample and create 1 single table. Each column is a column.
+
+# Diagram
+
 
 # Example output file
 
@@ -199,4 +210,6 @@ Quinlan AR, Hall IM. BEDTools: a flexible suite of utilities for comparing genom
 
 # Citation
 
-This code and these instructions were written by Patricia Q. Tran for the project of Arunima Kalita.ß
+This code and these instructions were written by Patricia Q. Tran for the project of Arunima Kalita.
+
+For any questions, please contact ptran5 [at] wisc [dot] edu
