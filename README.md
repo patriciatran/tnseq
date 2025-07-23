@@ -153,7 +153,7 @@ bash create_main_dag samples.txt BothSets.dag
 
 This will create a file named `BothSets.dag`
 
-5. Submit the workflow.
+6. Submit the workflow.
 
 ```
 condor_submit_dag BothSets.dag
@@ -162,7 +162,7 @@ condor_submit_dag BothSets.dag
 Wait for results to populate the /staging/netid/project/ folder.
 You can close the terminal and come back - your jobs will automatically be submitted and ran.
 
-6. Summarize the results. A script named `merged_files.sh` is available to help you summarize your results. This script takes 2 arguments: your `netid` and your `project` name.
+7. Summarize the results. A script named `merged_files.sh` is available to help you summarize your results. This script takes 2 arguments: your `netid` and your `project` name.
 
 ```
 bash merged_files.sh bbadger BothSets
