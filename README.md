@@ -6,13 +6,15 @@ The purpose of the pipeline is to analyze TnSeq data. TnSeq data usually is in t
 A series of steps are used to compile the number of reads mapped (count) onto TA sites accross the genome, and then narrowed down into segments of the genomes that are encoded by gene. 
 Overall the final table is a table of Genes with the number of TA sites insertions across replicates.
 
-# Input data
-You will need single-end sequences, in the form of 
+# Input data need 
+
+To run this workflow, you will need: 
+
+1. You will need single-end sequences, in the form of 
 `{sample}_R1_001.fastq` per sample.
 You may use the data you receive directly from the Sequencing Center.
 
-You will also need a reference genome: a `fasta` file and a `gff` file containing coordinates of the genomic features. You can usually download the fasta and gff file directly from NCBI.
-
+2. You will also need a reference genome: a `fasta` file and a `gff` file containing coordinates of the genomic features. You can usually download the fasta and gff file directly from NCBI.
 
 # File descriptions
 
@@ -28,7 +30,7 @@ The pipeline is designed to be **fully reproducible** from start to finish throu
 - `make_custom_dag.sh`: a bash script that will create a DAG for each sample
 - `create_main_dag.sh`: a bash script that will create a "super DAG" based off the .dag files you created using `make_custom_dag.sh`.
 
--`01-cutadapt.sub`: cutadapt script that takes trim the adapter off of the FASTQ file. For example, `mysequenceADAPTERsomethingelse`, will keep `mysequence` only. 
+- `01-cutadapt.sub`: cutadapt script that takes trim the adapter off of the FASTQ file. For example, `mysequenceADAPTERsomethingelse`, will keep `mysequence` only. 
 - `02-index_ref.sub`: Builds the genome index file for the reference genome, to prepare for mapping.
 - `03-map-to-ref.sub`: Maps a sample to the reference genome.
 - `04-sort-and-index-bam.sub`: Take the aligned reads, sorts and index the file.
@@ -43,6 +45,8 @@ annotation file of the reference genome into a `bed` format file.
 - `merge_files.sh`: Take all the files from step `09` for each sample and create 1 single table. Each column is a column.
 
 # Diagram
+
+![diagram](scripts/tnseq-workflow.png)
 
 
 # Example output file
